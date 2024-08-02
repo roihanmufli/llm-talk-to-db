@@ -35,6 +35,7 @@ langchain-text-splitters
 mypy-extensions
 SQLAlchemy
 mysqlclient
+mysql
 
 # talk to db
 # path
