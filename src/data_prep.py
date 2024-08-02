@@ -5,8 +5,7 @@ from langchain_google_genai import (
     GoogleGenerativeAIEmbeddings,
 )
 from langchain_core.example_selectors import SemanticSimilarityExampleSelector
-
-
+import streamlit as st
 
 
 
@@ -19,7 +18,7 @@ class Prep:
         self.text_retriever = None
         self.embeddings = GoogleGenerativeAIEmbeddings(
             model="models/embedding-001",
-            google_api_key=os.getenv("GOOGLE_API_KEY"),
+            google_api_key=st.secrets["GOOGLE_API_KEY"],
         )
 
     def get_query_examples(

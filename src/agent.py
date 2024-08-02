@@ -27,6 +27,8 @@ from langchain_core.prompts import (
 from langchain.agents import create_tool_calling_agent
 from dotenv import load_dotenv
 from langchain.agents.agent import AgentExecutor
+import streamlit as st
+
 
 
 load_dotenv()
@@ -35,7 +37,7 @@ class SQLAgent:
         # Initialize Gemini Embeddings
         self.embeddings = GoogleGenerativeAIEmbeddings(
             model="models/embedding-001",
-            google_api_key=os.getenv("GOOGLE_API_KEY")
+            google_api_key=st.secrets["GOOGLE_API_KEY"]
         )
 
         # Initialize Gemini Chat model
@@ -43,7 +45,7 @@ class SQLAgent:
             # model="models/gemini-1.5-pro-latest",
             model= str(model_usage),
             temperature=0,
-            google_api_key=os.getenv("GOOGLE_API_KEY"),
+            google_api_key=st.secrets["GOOGLE_API_KEY"],
             max_tokens=None,
             timeout=None,
             max_retries=2
