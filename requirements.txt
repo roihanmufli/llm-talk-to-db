@@ -32,6 +32,8 @@ langchain-experimental==0.0.62
 mysql-connector-python==9.0.0
 pymysql
 langchain-text-splitters
+mypy-extensions
+SQLAlchemy
 
 # talk to db
 # path
