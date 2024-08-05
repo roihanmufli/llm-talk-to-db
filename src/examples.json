@@ -56,7 +56,7 @@
 
     {
         "input": "kategori nasabah yang memiliki jumlah transaksi terbanyak di bulan juni",
-        "query": "SELECT `Revw Desc` , SUM(`Jumlah Trx`) FROM db_cc.cc_trx WHERE MONTH(`Report Date`) = 6 AND `Nomor Trx` = 1 GROUP BY `Revw Desc` order by SUM(`Jumlah Trx`) DESC;"
+        "query": "SELECT `Revw Desc` , SUM(`Jumlah Trx`) FROM cc_trx WHERE MONTH(`Report Date`) = 6 AND `Nomor Trx` = 1 GROUP BY `Revw Desc` order by SUM(`Jumlah Trx`) DESC;"
     },
     
     {
@@ -93,15 +93,15 @@
     },
     {
         "input": "kebanyakan customer/nasabah menggunakan kartu kredit untuk belanja apa",
-        "query": "SELECT `Mcc Desc`, COUNT(*) FROM cc_trx WHERE `Mcc Desc` != '' AND `Nomor Trx` = 1  GROUP BY `Mcc Desc` ORDER BY COUNT(*) DESC"
+        "query": "SELECT `Mcc Desc`, SUM(`Jumlah Trx`) FROM cc_trx WHERE `Mcc Desc` != '' AND `Nomor Trx` = 1  GROUP BY `Mcc Desc` ORDER BY SUM(`Jumlah Trx`) DESC"
     },
     {
         "input": "MCC yang paling populer untuk transasi kartu kredit apa",
-        "query": "SELECT `Mcc Desc`, COUNT(*) FROM cc_trx WHERE `Mcc Desc` != '' AND `Nomor Trx` = 1  GROUP BY `Mcc Desc` ORDER BY COUNT(*) DESC LIMIT 1"
+        "query": "SELECT `Mcc Desc`, SUM(`Jumlah Trx`) FROM cc_trx WHERE `Mcc Desc` != '' AND `Nomor Trx` = 1  GROUP BY `Mcc Desc` ORDER BY SUM(`Jumlah Trx`) DESC LIMIT 1"
     },
     {
         "input": "merchant category yang paling populer untuk transasi kartu kredit apa",
-        "query": "SELECT `Mcc Desc`, COUNT(*) FROM cc_trx WHERE `Mcc Desc` != '' AND `Nomor Trx` = 1 GROUP BY `Mcc Desc` ORDER BY COUNT(*) DESC LIMIT 1"
+        "query": "SELECT `Mcc Desc`, SUM(`Jumlah Trx`) FROM cc_trx WHERE `Mcc Desc` != '' AND `Nomor Trx` = 1 GROUP BY `Mcc Desc` ORDER BY SUM(`Jumlah Trx`) DESC LIMIT 1"
     },
     {
         "input": "berapa banyak cardholder yang bertransaksi di bulan juni 2024",
@@ -160,6 +160,18 @@
         "query": "SELECT MONTH(`Report Date`),SUM(`Jumlah Trx`) FROM cc_trx WHERE `Nomor Trx` = 1 GROUP BY MONTH(`Report Date`) ORDER BY SUM(`Jumlah Trx`) DESC"
     },
     {
+        "input": "data transaksi",
+        "query": "SELECT * FROM cc_trx WHERE `Nomor Trx` = 1 AND `Jumlah Trx` != ''"
+    },
+    {
+        "input": "total transaksi di tahun 2024",
+        "query": "SELECT SUM(`Nominal`) FROM cc_trx WHERE YEAR(`Report Date`) = 2024 AND `Nomor Trx` = 1"
+    },
+    {
+        "input": "berikan nominal transaksi berdasarkan gender bulan juni dalam tahun 2024",
+        "query": "SELECT `Gender`, SUM(`Nominal`) FROM cc_trx WHERE MONTH(`Report Date`) = 6 AND YEAR(`Report Date`) = 2024 AND `Nomor Trx` = 1 GROUP BY `Gender`"
+    },
+    {
         "input": "nasabah yang berumur kurang dari 21 tahun",
         "query": "SELECT * FROM cc_trx WHERE `Tier Age` = '1. < 21'"
     },
@@ -189,99 +201,107 @@
     },
     {
         "input": "daftar nasabah yang melakukan transaksi international atau luar negeri",
-        "query": "SELECT * FROM db_cc.cc_trx WHERE `Flag Location Trx`='International'"
+        "query": "SELECT * FROM cc_trx WHERE `Flag Location Trx`='International' AND `Nomor Trx` = 1"
     },
     {
         "input": "jumlah transaksi international atau luar negeri",
-        "query": "SELECT SUM(`Jumlah Trx`) FROM db_cc.cc_trx WHERE `Flag Location Trx`='International' AND `Nomor Trx` = 1"
+        "query": "SELECT SUM(`Jumlah Trx`) FROM cc_trx WHERE `Flag Location Trx`='International' AND `Nomor Trx` = 1"
     },
     {
         "input": "jumlah transaksi domestik atau dalam negeri yang menggunakan EDC bank sinarmas",
-        "query": "SELECT SUM(`Jumlah Trx`) FROM db_cc.cc_trx WHERE `Flag Location Trx`='Domestic On Us' AND `Nomor Trx` = 1"
+        "query": "SELECT SUM(`Jumlah Trx`) FROM cc_trx WHERE `Flag Location Trx`='Domestic On Us' AND `Nomor Trx` = 1"
     },
     {
         "input": "jumlah transaksi domestik atau dalam negeri yang menggunakan EDC bank lain atau bukan EDC bank sinarmas",
-        "query": "SELECT SUM(`Jumlah Trx`) FROM db_cc.cc_trx WHERE `Flag Location Trx`='Domestic Off Us' AND `Nomor Trx` = 1"
+        "query": "SELECT SUM(`Jumlah Trx`) FROM cc_trx WHERE `Flag Location Trx`='Domestic Off Us' AND `Nomor Trx` = 1"
     },
     {
         "input": "jumlah transaksi domestik atau dalam negeri",
-        "query": "SELECT SUM(`Jumlah Trx`) FROM db_cc.cc_trx WHERE `Flag Location Trx`!='International' AND `Nomor Trx` = 1"
+        "query": "SELECT SUM(`Jumlah Trx`) FROM cc_trx WHERE `Flag Location Trx`='Domestic Off Us' AND `Flag Location Trx`='Domestic On Us'  AND `Nomor Trx` = 1"
+    },
+    {
+        "input": "data transaksi domestik atau dalam negeri",
+        "query": "SELECT * FROM cc_trx WHERE `Flag Location Trx`='Domestic Off Us' AND `Flag Location Trx`='Domestic On Us' AND `Nomor Trx` = 1"
+    },
+    {
+        "input": "data transaksi international atau luar negeri",
+        "query": "SELECT * FROM cc_trx WHERE `Flag Location Trx`='International' AND `Nomor Trx` = 1"
     },
     {
         "input": "nasabah atau customer yang melakukan transaksi online",
-        "query": "SELECT * FROM db_cc.cc_trx WHERE `Pos Mode`='Online' AND `Nomor Trx` = 1"
+        "query": "SELECT * FROM cc_trx WHERE `Pos Mode`='Online' AND `Nomor Trx` = 1"
     },
     {
         "input": "nasabah atau customer yang melakukan transaksi offline",
-        "query": "SELECT * FROM db_cc.cc_trx WHERE `Pos Mode`='Offline' AND `Nomor Trx` = 1"
+        "query": "SELECT * FROM cc_trx WHERE `Pos Mode`='Offline' AND `Nomor Trx` = 1"
     },
     {
         "input": "jumlah transaksi online",
-        "query": "SELECT SUM(`Jumlah Trx`) FROM db_cc.cc_trx WHERE `Pos Mode`='Online' AND `Nomor Trx` = 1"
+        "query": "SELECT SUM(`Jumlah Trx`) FROM cc_trx WHERE `Pos Mode`='Online' AND `Nomor Trx` = 1"
     },
     {
         "input": "jumlah transaksi offline",
-        "query": "SELECT SUM(`Jumlah Trx`) FROM db_cc.cc_trx WHERE `Pos Mode`='Offline' AND `Nomor Trx` = 1"
+        "query": "SELECT SUM(`Jumlah Trx`) FROM cc_trx WHERE `Pos Mode`='Offline' AND `Nomor Trx` = 1"
     },
     {
         "input": "berapa nominal transaksi offline dari corporate card bulan juni 2024",
-        "query": "SELECT SUM(`Nominal`) FROM db_cc.cc_trx WHERE `Pos Mode`='Offline' AND `Card Type`='Corporate' AND MONTH(`Report Date`)= 6 AND YEAR(`Report Date`)= 2024 AND `Nomor Trx` = 1"
+        "query": "SELECT SUM(`Nominal`) FROM cc_trx WHERE `Pos Mode`='Offline' AND `Card Type`='Corporate' AND MONTH(`Report Date`)= 6 AND YEAR(`Report Date`)= 2024 AND `Nomor Trx` = 1"
     },
     {
         "input": "data customer atau nasabah yang menggunakan tipe kartu korporat",
-        "query": "SELECT * FROM db_cc.cc_trx WHERE `Card Type`='Corporate'"
+        "query": "SELECT * FROM cc_trx WHERE `Card Type`='Corporate'"
     },
     {
         "input": "data customer atau nasabah yang menggunakan tipe kartu indigo",
-        "query": "SELECT * FROM db_cc.cc_trx WHERE `Card Type`='Indigo'"
+        "query": "SELECT * FROM cc_trx WHERE `Card Type`='Indigo'"
     },
     {
         "input": "data customer atau nasabah yang menggunakan tipe kartu platinum",
-        "query": "SELECT * FROM db_cc.cc_trx WHERE `Card Type`='Platinum'"
+        "query": "SELECT * FROM cc_trx WHERE `Card Type`='Platinum'"
     },
     {
         "input": "data customer atau nasabah yang menggunakan tipe kartu alfamart",
-        "query": "SELECT * FROM db_cc.cc_trx WHERE `Card Type`='Alfamart'"
+        "query": "SELECT * FROM cc_trx WHERE `Card Type`='Alfamart'"
     },
     {
         "input": "data customer atau nasabah yang menggunakan tipe kartu orami",
-        "query": "SELECT * FROM db_cc.cc_trx WHERE `Card Type`='Orami'"
+        "query": "SELECT * FROM cc_trx WHERE `Card Type`='Orami'"
     },
     {
         "input": "melihat kode unik customer atau nomor customer",
-        "query": "SELECT DISTINCT CIF_NUMBER FROM db_cc.cc_trx"
+        "query": "SELECT DISTINCT CIF_NUMBER FROM cc_trx"
     },
     {
         "input": "customer atau nasabah yang memiliki tier limit lebih dari 100 juta",
-        "query": "SELECT * FROM db_cc.cc_trx WHERE `Tier Limit` = '8. > 100 Jt'"
+        "query": "SELECT * FROM cc_trx WHERE `Tier Limit` = '8. > 100 Jt'"
     },
     {
         "input": "customer atau nasabah yang memiliki tier limit 5 juta atau kurang dari 5 juta",
-        "query": "SELECT * FROM db_cc.cc_trx WHERE `Tier Limit` = '1. 0 s.d 5 Jt'"
+        "query": "SELECT * FROM cc_trx WHERE `Tier Limit` = '1. 0 s.d 5 Jt'"
     },
     {
         "input": "customer atau nasabah yang memiliki tier limit lebih dari 40 juta sampai dengan 50 juta",
-        "query": "SELECT * FROM db_cc.cc_trx WHERE `Tier Limit` = '6. > 40 Jt s.d 50 Jt'"
+        "query": "SELECT * FROM cc_trx WHERE `Tier Limit` = '6. > 40 Jt s.d 50 Jt'"
     },
     {
         "input": "customer atau nasabah yang memiliki tier limit lebih dari 30 juta sampai dengan 40 juta",
-        "query": "SELECT * FROM db_cc.cc_trx WHERE `Tier Limit` = '5. > 30 Jt s.d 40 Jt'"
+        "query": "SELECT * FROM cc_trx WHERE `Tier Limit` = '5. > 30 Jt s.d 40 Jt'"
     },
     {
         "input": "customer atau nasabah yang memiliki tier limit lebih dari 10 juta sampai dengan 20 juta",
-        "query": "SELECT * FROM db_cc.cc_trx WHERE `Tier Limit` = '3. > 10 Jt s.d 20 Jt'"
+        "query": "SELECT * FROM cc_trx WHERE `Tier Limit` = '3. > 10 Jt s.d 20 Jt'"
     },
     {
         "input": "customer atau nasabah yang memiliki tier limit lebih dari 20 juta sampai dengan 30 juta",
-        "query": "SELECT * FROM db_cc.cc_trx WHERE `Tier Limit` = '4. > 20 Jt s.d 30 Jt'"
+        "query": "SELECT * FROM cc_trx WHERE `Tier Limit` = '4. > 20 Jt s.d 30 Jt'"
     },
     {
         "input": "customer atau nasabah yang memiliki tier limit lebih dari 5 juta sampai dengan 10 juta",
-        "query": "SELECT * FROM db_cc.cc_trx WHERE `Tier Limit` = '2. > 5 Jt s.d 10 Jt'"
+        "query": "SELECT * FROM cc_trx WHERE `Tier Limit` = '2. > 5 Jt s.d 10 Jt'"
     },
     {
         "input": "customer atau nasabah yang memiliki tier limit lebih dari 50 juta sampai dengan 100 juta",
-        "query": "SELECT * FROM db_cc.cc_trx WHERE `Tier Limit` = '7. > 50 Jt s.d 100 Jt'"
+        "query": "SELECT * FROM cc_trx WHERE `Tier Limit` = '7. > 50 Jt s.d 100 Jt'"
     },
     {
         "input": "berapa jumlah transaksi tier limit lebih dari 100 juta selama tahun 2024",
@@ -290,6 +310,22 @@
     {
         "input": "data transaksi",
         "query":"SELECT * FROM cc_trx WHERE `Nomor Trx` = 1"
+    },
+    {
+        "input": "data mcc",
+        "query":"SELECT distinct `Mcc Desc` FROM cc_trx where `Mcc Desc` != ''"
+    },
+    {
+        "input": "MCC yang paling populer",
+        "query":"SELECT `Mcc Desc`, SUM(`Jumlah Trx`) FROM cc_trx where `Mcc Desc` != '' AND `Nomor Trx`=1 GROUP BY `Mcc Desc` LIMIT 1"
+    },
+    {
+        "input": "apa MCC yang paling populer untuk transaksi",
+        "query":"SELECT `Mcc Desc`, SUM(`Jumlah Trx`) FROM cc_trx where `Mcc Desc` != '' AND `Nomor Trx`=1 GROUP BY `Mcc Desc` ORDER BY SUM(`Jumlah Trx`) DESC LIMIT 1"
+    },
+    {
+        "input": "mcc yang punya paling banyak jumlah transaksinya",
+        "query":"SELECT `Mcc Desc`, SUM(`Jumlah Trx`) FROM cc_trx where `Mcc Desc` != '' AND `Nomor Trx`=1 GROUP BY `Mcc Desc` ORDER BY SUM(`Jumlah Trx`) DESC LIMIT 1"
     }
 
 ]

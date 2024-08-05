@@ -36,7 +36,7 @@ class Prep:
             examples,
             self.embeddings,
             FAISS,
-            k=10,
+            k=5,
             input_keys=["input"],
         )
 

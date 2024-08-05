@@ -113,7 +113,7 @@ class SQLAgent:
 
         result = agent_executor.invoke({
             "input": query,
-            "top_k": 10,
+            "top_k": 5,
             "dialect": "mysql",
             "agent_scratchpad": [],
         })['output']
