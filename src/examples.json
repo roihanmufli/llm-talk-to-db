@@ -326,6 +326,10 @@
     {
         "input": "mcc yang punya paling banyak jumlah transaksinya",
         "query":"SELECT `Mcc Desc`, SUM(`Jumlah Trx`) FROM cc_trx where `Mcc Desc` != '' AND `Nomor Trx`=1 GROUP BY `Mcc Desc` ORDER BY SUM(`Jumlah Trx`) DESC LIMIT 1"
+    },
+    {
+        "input": "mcc yang populer secara nominal",
+        "query":"SELECT `Mcc Desc`, SUM(`Nominal`) FROM cc_trx WHERE `Mcc Desc` != '' AND `Nomor Trx` = 1 GROUP BY `Mcc Desc` ORDER BY SUM(`Nominal`) DESC LIMIT 5"
     }
 
 ]
