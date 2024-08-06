@@ -38,6 +38,7 @@ class SQLAgent:
         self.embeddings = GoogleGenerativeAIEmbeddings(
             model="models/embedding-001",
             google_api_key=st.secrets["GOOGLE_API_KEY"]
+            # google_api_key=os.getenv("GOOGLE_API_KEY")
         )
 
         # Initialize Gemini Chat model
@@ -46,6 +47,7 @@ class SQLAgent:
             model= str(model_usage),
             temperature=0,
             google_api_key=st.secrets["GOOGLE_API_KEY"],
+            # google_api_key=os.getenv("GOOGLE_API_KEY"),
             max_tokens=None,
             timeout=None,
             max_retries=2
@@ -74,6 +76,8 @@ class SQLAgent:
         DO NOT make any DML statements (INSERT, UPDATE, DELETE, DROP etc.) to the database.
 
         If the question does not seem related to the database, just return "I don't know" as the answer.
+        If answering numeric value, use thousand delimiter.
+
 
         Here are some examples of user inputs and their corresponding SQL queries:"""
 
@@ -107,7 +111,9 @@ class SQLAgent:
             agent=agent,
             tools=tools,
             verbose=True,
-            max_iteration=20
+            max_iteration=20,
+            return_intermediate_steps=True
+
             # callbacks=[await asyncio.sleep(5)]
         )
 
@@ -115,12 +121,14 @@ class SQLAgent:
             "input": query,
             "top_k": 5,
             "dialect": "mysql",
-            "agent_scratchpad": [],
-        })['output']
+            "agent_scratchpad": []
+        })
+        source_query = ""
+        for i in result['intermediate_steps']:
+            source_query = source_query + i[0].log
 
-        if result == "I don't know.":
-            result = "Saya tidak tahu"
+        output = result['output']
         
-        return result
+        return output,source_query
 
 

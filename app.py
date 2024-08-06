@@ -20,10 +20,10 @@ def get_conversationchain(query,selected_option,vector):
         model = "models/gemini-1.5-flash"
 
     qna = SQLAgent(model,vector)
-    results = qna.generate_response(
+    results,source_query = qna.generate_response(
         query=query
     )
-    return results
+    return results,source_query
 
 # def clear_vector_db():
 #     st.session_state.messages = [{"role": "assistant", "content": "upload some documents and ask me a question"}]
@@ -81,8 +81,9 @@ def main():
         st.chat_message("user").markdown(user_question)
         st.session_state.messages.append({"role": "user", "content": user_question})
 
-        response = get_conversationchain(user_question,selected_option,st.session_state["example_query_selector"])
-
+        response,source_query = get_conversationchain(user_question,selected_option,st.session_state["example_query_selector"])
+        response += "\n\n Query Logs:  \n" + f"```{source_query}```"
+        
         st.chat_message("assistant").markdown(response)
         st.session_state.messages.append({"role": "assistant", "content": response})
 

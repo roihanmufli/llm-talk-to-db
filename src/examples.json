@@ -232,6 +232,14 @@
         "query": "SELECT * FROM cc_trx WHERE `Pos Mode`='Online' AND `Nomor Trx` = 1"
     },
     {
+        "input": "ada berapa jumlah transaksi online",
+        "query": "SELECT SUM(`Jumlah Trx`) FROM cc_trx WHERE `Pos Mode`='Online' AND `Nomor Trx` = 1"
+    },
+    {
+        "input": "ada berapa jumlah transaksi offline",
+        "query": "SELECT SUM(`Jumlah Trx`) FROM cc_trx WHERE `Pos Mode`='Offline' AND `Nomor Trx` = 1"
+    },
+    {
         "input": "nasabah atau customer yang melakukan transaksi offline",
         "query": "SELECT * FROM cc_trx WHERE `Pos Mode`='Offline' AND `Nomor Trx` = 1"
     },
@@ -330,6 +338,30 @@
     {
         "input": "mcc yang populer secara nominal",
         "query":"SELECT `Mcc Desc`, SUM(`Nominal`) FROM cc_trx WHERE `Mcc Desc` != '' AND `Nomor Trx` = 1 GROUP BY `Mcc Desc` ORDER BY SUM(`Nominal`) DESC LIMIT 5"
+    },
+    {
+        "input": "berapa total transaksi di bulan maret 2024",
+        "query":"SELECT SUM(`Nominal`) FROM cc_trx WHERE MONTH(`Report Date`) = 3 AND YEAR(`Report Date`) = 2024 AND `Nomor Trx` = 1"
+    },
+    {
+        "input": "total transaksi secara keseluruhan",
+        "query":"SELECT SUM(`Nominal`) FROM cc_trx WHERE `Nomor Trx` = 1"
+    },
+    {
+        "input": "daftar card holder type",
+        "query":"SELECT DISTINCT `Revw Desc` FROM cc_trx"
+    },
+    {
+        "input": "tier limit apa yang paling banyak dimiliki card holder type umum",
+        "query":"SELECT `Tier Limit`, COUNT(*) AS count FROM cc_trx WHERE `Revw Desc` GROUP BY `Tier Limit` ORDER BY count DESC LIMIT 5"
+    },
+    {
+        "input": "breakdown jumlah card holder type umum berdasarkan limit tier",
+        "query":"SELECT `Revw Desc` AS `Card Holder Type`, `Tier Limit`, COUNT(*) AS `Jumlah` FROM cc_trx WHERE `Revw Desc` = 'Umum' GROUP BY `Revw Desc`, `Tier Limit` ORDER BY `Jumlah`"
+    },
+    {
+        "input": "berapa jumlah transaksi international yang menggunakan kartu indigo dari januari sampai mei 2024",
+        "query":"SELECT SUM(`Jumlah Trx`) FROM cc_trx WHERE `Flag Location Trx` = 'International' AND `Card Type` = 'Indigo' AND MONTH(`Report Date`) BETWEEN 1 AND 5 AND YEAR(`Report Date`) = 2024 AND `Nomor Trx` = 1"
     }
 
 ]
