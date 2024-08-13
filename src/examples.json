@@ -362,6 +362,30 @@
     {
         "input": "berapa jumlah transaksi international yang menggunakan kartu indigo dari januari sampai mei 2024",
         "query":"SELECT SUM(`Jumlah Trx`) FROM cc_trx WHERE `Flag Location Trx` = 'International' AND `Card Type` = 'Indigo' AND MONTH(`Report Date`) BETWEEN 1 AND 5 AND YEAR(`Report Date`) = 2024 AND `Nomor Trx` = 1"
+    },
+    {
+        "input": "jumlah transaksi month to date (mtd)",
+        "query":"SELECT SUM(`Jumlah Trx`) FROM defaultdb.cc_trx WHERE MONTH(`Report Date`) =(SELECT MONTH(max(`Report Date`))  FROM defaultdb.cc_trx) AND `Nomor Trx`=1"
+    },
+    {
+        "input": "total transaksi month to date (mtd)",
+        "query":"SELECT SUM(`Nominal`) FROM defaultdb.cc_trx WHERE MONTH(`Report Date`) =(SELECT MONTH(max(`Report Date`))  FROM defaultdb.cc_trx) AND `Nomor Trx` = 1"
+    },
+    {
+        "input": "nominal transaksi month to date (mtd)",
+        "query":"SELECT SUM(`Nominal`) FROM defaultdb.cc_trx WHERE MONTH(`Report Date`) =(SELECT MONTH(max(`Report Date`))  FROM defaultdb.cc_trx) AND `Nomor Trx` = 1"
+    },
+    {
+        "input": "jumlah transaksi year to date (ytd)",
+        "query":"SELECT SUM(`Jumlah Trx`) FROM defaultdb.cc_trx WHERE YEAR(`Report Date`) =(SELECT YEAR(max(`Report Date`))  FROM defaultdb.cc_trx) AND `Nomor Trx` = 1"
+    },
+    {
+        "input": "total transaksi year to date (ytd)",
+        "query":"SELECT SUM(`Nominal`) FROM defaultdb.cc_trx WHERE YEAR(`Report Date`) =(SELECT YEAR(max(`Report Date`))  FROM defaultdb.cc_trx) AND `Nomor Trx` = 1"
+    },
+    {
+        "input": "nominal transaksi year to date (ytd)",
+        "query":"SELECT SUM(`Nominal`) FROM defaultdb.cc_trx WHERE YEAR(`Report Date`) =(SELECT YEAR(max(`Report Date`))  FROM defaultdb.cc_trx) AND `Nomor Trx` = 1"
     }
 
 ]
